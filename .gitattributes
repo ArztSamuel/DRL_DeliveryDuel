@@ -1,0 +1,7 @@
+* text=auto
+
+*.mat -text
+*.cs diff=csharp text
+
+# Prevent Build folder from line conversions
+deliveryduel/builds/** -text

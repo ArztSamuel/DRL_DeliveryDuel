@@ -8,7 +8,7 @@ This repository provides access to all material necessary to reproduce the resul
  - Built instances of Delivery Duel necessary to reproduce our results and which can be used for future work ([deliveryduel/](deliveryduel/))
 
 ## Delivery Duel
-<img src="img/Ingame.png" width="50%">
+<img src="img/Ingame.png" width="75%">
 
 In Delivery Duel the player / agent controls a delivery van. The agent's goal is to deliver pizzas to target locations in an urban environment. The entire scene is rendered from an approximately 75° top-down perspective. Delivery destinations are highlighted above the corresponding building by a big circular marker. The agent completes a delivery by conducting a throw action in the correct direction and hitting the destination building. After a delivery, the agent has to return to its base, located in the middle of the city, before a new destination is highlighted. The agent's score is increased for delivering items, proportional to how fast the item was delivered, and for returning to the base.
 
@@ -22,7 +22,7 @@ There are three optional environment modifications, which can be turned off or o
 
 These three modifications are often abbreviated as 3D / 2D, Phys / Lin, Non-Cont / Cont.
 
-[Comparison of the complex 3D render-mode, i.e. as in the original game, and the simple 2D render-mode, with only the most important information rendered.](img/RenderComparison.jpg)
+<img src="img/RenderComparison.jpg" width="50%">
 
 When using the [run_baselines](frameworks/ml-agents/python/run_baselines.py) script for running experiments, you can use the optional commandline argument `--unity-arguments "<additional arguments>"` to pass commandline arguments to the unity process. The following unity arguments can be set to turn these optional modifications on or off:
  - `--render-mode`: `complex` or `simple`

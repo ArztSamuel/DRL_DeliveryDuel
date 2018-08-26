@@ -37,7 +37,7 @@ For instance, a dqn test-run using the complex render-mode, linear motion contro
 ## Frameworks
 In order to train Deep Reinforcement Learning agents on this novel environment, three different frameworks were combined:
  - [OpenAI Gym](https://github.com/openai/gym)
- - [OpenAI Baselines](https://github.com/Unity-Technologies/ml-agents)
+ - [OpenAI Baselines](https://github.com/openai/baselines)
  - [Unity ML-Agents](https://github.com/Unity-Technologies/ml-agents)
 
 Baselines provides open-source Python implementations of popular RL algorithms. Gym defines an open-source Python interface for agent environments. ML-Agents extends the Unity engine with an interface for testing AI algorithms on existing Unity games by offering an API which connects Unity with Python. Please see each individual framework's license file included in their respective subdirectory for license information of each framework.

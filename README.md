@@ -33,6 +33,11 @@ For instance, a dqn test-run using the complex render-mode, linear motion contro
 
 `python run_baselines.py <path_to_deliveryduel_build> --method dqn --unity_arguments "--render-mode complex --motion-control linear --reward-signal cont"`
 
+### Delivery Duel Credits
+Delivery Duel was developed by Samuel Arzt, Katrin-Anna Zibuschka and Lukas Machegger, who approved to make the game publicly available for scietific purposes.
+The icons for delivery items were used under the [CC3 License](https://creativecommons.org/licenses/by/3.0/), with attribution to the following authors:
+ - Pizza Icon: Designed by [freepik](https://www.flaticon.com/authors/freepik) from Flaticon.
+ - Cabbage, Mail, Milk and Notepad Icon: Designed by [madebyoliver](https://www.flaticon.com/authors/madebyoliver) from Flaticon.
 
 ## Frameworks
 In order to train Deep Reinforcement Learning agents on this novel environment, three different frameworks were combined:

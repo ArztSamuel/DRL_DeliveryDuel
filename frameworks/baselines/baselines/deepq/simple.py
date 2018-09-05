@@ -100,7 +100,8 @@ def learn(env,
           prioritized_replay_eps=1e-6,
           param_noise=False,
           double_q=False,
-          callback=None):
+          callback=None,
+          model_file=None):
     """Train a deepq model.
 
     Parameters
@@ -225,7 +226,12 @@ def learn(env,
     done = False
     with tempfile.TemporaryDirectory() as td:
         model_saved = False
-        model_file = os.path.join(td, "model")
+        if model_file is None:
+            model_file = os.path.join(td, "model")
+        elif os.path.exists(os.path.dirname(model_file)):
+            print("Loading model from: " + model_file)
+            load_state(model_file)
+
         try:
             episode_length = 0
             for t in range(max_timesteps):                
@@ -308,8 +314,9 @@ def learn(env,
             print("Aborted training.")
         finally:
             if model_saved:
-                if print_freq is not None:
-                    logger.log("Restored model with mean reward: {}".format(saved_mean_reward))
-                load_state(model_file)
+                print("Model restoring was turned off.")
+                # if print_freq is not None:
+                #     logger.log("Restored model with mean reward: {}".format(saved_mean_reward))
+                # load_state(model_file)
 
     return act

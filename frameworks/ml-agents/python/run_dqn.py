@@ -39,7 +39,7 @@ def _create_summary_callback(summary_writer):
 
     return _summary_callback
 
-def learn(env_path, seed, max_steps, reward_range, base_port, unity_arguments, summary_writer):
+def learn(env_path, seed, max_steps, reward_range, base_port, unity_arguments, summary_writer, model_file):
     unity_env = UnityEnvironment(file_name=env_path, seed=seed, base_port=base_port, arguments=unity_arguments)
     env = _make_dqn(unity_env, train_mode=True, reward_range=reward_range)   
 
@@ -67,6 +67,7 @@ def learn(env_path, seed, max_steps, reward_range, base_port, unity_arguments, s
         param_noise=False,
         double_q=True,
         callback=_create_summary_callback(summary_writer),
+        model_file=model_file
     )
 
     env.close()

@@ -13,6 +13,8 @@ from time import strftime
 from run_dqn import learn as learn_dqn, enjoy as enjoy_dqn
 from run_a2c import learn as learn_a2c, enjoy as enjoy_a2c
 
+from baselines.deepq.utils import save_state
+
 if __name__ == '__main__':
     logger = logging.getLogger("unityagents")
     _USAGE = '''
@@ -28,7 +30,8 @@ if __name__ == '__main__':
       --rewardUpperBounds=<n>       The upper bounds of the rewards of the environment [default: inf].
       --max-steps=<n>               The amount of timesteps before the learning process is stopped [default: 10000000].
       --base-port=<n>               The base port to be used for communication between python and the environment [default: 5005].
-      --output-folder=<n>           The folder to save the trained model and summary data to [default: outputs\\].
+      --stats-path=<n>              The folder to save the statistics of training progress to [default: outputs\\].
+      --model-file=<n>              The filepath to save the model to; loads the model file at given path if already existent, uses the same folder as stats if None [default: None]
       --unity-arguments=<n>         The arguments to pass to the started unity process [default: '']
     '''
 
@@ -49,7 +52,8 @@ if __name__ == '__main__':
         seed = np.random.randint(0, 999999)
     max_steps = int(options['--max-steps'])
     base_port = int(options['--base-port'])
-    output_folder = options['--output-folder']
+    stats_folder = options['--stats-path']
+    model_file = options['--model-file']
     time_string = strftime("%Y-%m-%d.%H-%M-%S")
     unity_arguments = options['--unity-arguments']
     if unity_arguments == '':
@@ -57,31 +61,31 @@ if __name__ == '__main__':
     else:
         unity_arguments = unity_arguments.split(" ")
 
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+    if not os.path.exists(stats_folder):
+        os.makedirs(stats_folder)
 
-    summary_writer = tf.summary.FileWriter(output_folder + "summaries\\" + method + "\\" + time_string + "\\")
+    summary_writer = tf.summary.FileWriter(stats_folder + "summaries\\" + method + "\\" + time_string + "\\")
 
     set_global_seeds(seed)
 
+    if model_file == 'None':
+        model_file = os.path.abspath(os.path.dirname(__file__)) + "\\" + stats_folder + "models\\" + method + "\\" + time_string + "\\" + os.path.basename(env_path).split('.')[0]
+    
     if enjoy_path == 'None':
         # Train a new model
+        
         act = None
         if method == 'dqn':
             print("Training using DQN...")
-            act = learn_dqn(env_path=env_path, seed=seed, max_steps=max_steps, reward_range=reward_range, base_port=base_port, unity_arguments=unity_arguments, summary_writer=summary_writer)
+            act = learn_dqn(env_path=env_path, seed=seed, max_steps=max_steps, reward_range=reward_range, base_port=base_port, unity_arguments=unity_arguments, summary_writer=summary_writer, model_file=model_file)
         elif method == 'a2c':
             print("Training using A2C...")
             act = learn_a2c(env_path=env_path, seed=seed, max_steps=max_steps, reward_range=reward_range, base_port=base_port, unity_arguments=unity_arguments, summary_writer=summary_writer)
         else:
             print("Unknown method: \"" + method + "\".")
 
-        model_file_name = os.path.basename(env_path).split('.')[0] + ".pkl"
-        model_path = os.path.abspath(os.path.dirname(__file__)) + "\\" + output_folder + "models\\" + method + "\\" + time_string + "\\"
-        print("Saving model to " + model_path + ".")
-        if not os.path.exists(model_path):
-            os.makedirs(model_path)
-        act.save(model_path + model_file_name)
+        print("Saving model to " + model_file + ".")
+        save_state(model_file)
     else:
         # Load and enjoy an existing model
         if method == 'dqn':

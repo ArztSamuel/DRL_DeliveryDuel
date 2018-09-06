@@ -7,12 +7,14 @@ from baselines.common.atari_wrappers import WarpFrame, FrameStack
 from unityagents import UnityEnvironment, UnityEnvironmentException
 
 from baselines_wrapper import FloatToUInt8Frame, MLToGymEnv
+from baselines.deepq.utils import load_state
 
 import tensorflow as tf
 import numpy as np
 import time
 import keyboard
 import cv2
+
 
 def _make_dqn(unity_env, train_mode, reward_range=(-np.inf, np.inf)):
     env = MLToGymEnv(unity_env, train_mode=train_mode, reward_range=reward_range)
@@ -39,17 +41,18 @@ def _create_summary_callback(summary_writer):
 
     return _summary_callback
 
-def learn(env_path, seed, max_steps, reward_range, base_port, unity_arguments, summary_writer, model_file):
-    unity_env = UnityEnvironment(file_name=env_path, seed=seed, base_port=base_port, arguments=unity_arguments)
-    env = _make_dqn(unity_env, train_mode=True, reward_range=reward_range)   
-
+def __default_learn(env, max_steps, summary_writer, model_file):
     model = deepq.models.cnn_to_mlp(
         convs=[(32, 8, 4), (64, 4, 2), (64, 3, 1)],
         hiddens=[256],
         dueling=True,
     )
 
-    act = deepq.learn(
+    summary_callback = None
+    if summary_writer is not None:
+        summary_callback = _create_summary_callback(summary_writer)
+
+    return deepq.learn(
         env,
         q_func=model,
         lr=0.0000625,
@@ -66,24 +69,37 @@ def learn(env_path, seed, max_steps, reward_range, base_port, unity_arguments, s
         prioritized_replay_beta0=0.4,
         param_noise=False,
         double_q=True,
-        callback=_create_summary_callback(summary_writer),
+        callback=summary_callback,
         model_file=model_file
     )
+
+def learn(env_path, seed, max_steps, reward_range, base_port, unity_arguments, summary_writer, model_file):
+    unity_env = UnityEnvironment(file_name=env_path, seed=seed, base_port=base_port, arguments=unity_arguments)
+    env = _make_dqn(unity_env, train_mode=True, reward_range=reward_range)   
+
+    act = __default_learn(env, max_steps, summary_writer, model_file)
 
     env.close()
     return act
 
-def enjoy(env_path, seed, max_steps, base_port, unity_arguments, model_path):
+def enjoy(env_path, seed, max_steps, base_port, unity_arguments, model_file):
     unity_env = UnityEnvironment(file_name=env_path, seed=seed, base_port=base_port, arguments=unity_arguments)
-    env = _make_dqn(unity_env, train_mode=False)
-    act = deepq.load(model_path)
+    env = _make_dqn(unity_env, train_mode=False)   
+
+    # let learn method handle the correct loading and then simply use returned actor object
+    act = __default_learn(
+        env=env,
+        max_steps=0,
+        summary_writer=None,
+        model_file=model_file
+    )
 
     step_count = 0
 
     while step_count < max_steps:
         obs, done = env.reset(), False
         episode_rew = 0
-        time.sleep(2) # Time delay after reset for player interaction
+        time.sleep(2) # Time delay after each reset for player interaction (using 'N' key)
 
         while not done:
             if keyboard.is_pressed('n'):

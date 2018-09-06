@@ -25,7 +25,7 @@ if __name__ == '__main__':
     Options:
       --method=<n>                  The method to be used for training [choices: dqn, a2c, acktr][default: dqn].
       --seed=<n>                    Random seed used for training [default: -1].
-      --enjoy=<n>                   The path of the model to load in 'enjoy' mode, i.e. only serves as an actor without training [default: None].
+      --enjoy=<n>                   The model-file to load in 'enjoy' mode, i.e. only serves as an actor without training [default: None].
       --rewardLowerBounds=<n>       The lower bounds of the rewards of the environment [default: -inf].
       --rewardUpperBounds=<n>       The upper bounds of the rewards of the environment [default: inf].
       --max-steps=<n>               The amount of timesteps before the learning process is stopped [default: 10000000].
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     method = options['--method']
     env_path = options['<env>']
     seed = int(options['--seed'])
-    enjoy_path = options['--enjoy']
+    enjoy_file = options['--enjoy']
     reward_range = (-np.inf, np.inf)
     if options['--rewardLowerBounds'] != '-inf':
         reward_range = (float(options['--rewardLowerBounds']), reward_range[1])
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     if model_file == 'None':
         model_file = os.path.abspath(os.path.dirname(__file__)) + "\\" + stats_folder + "models\\" + method + "\\" + time_string + "\\" + os.path.basename(env_path).split('.')[0]
     
-    if enjoy_path == 'None':
+    if enjoy_file == 'None':
         # Train a new model
         
         act = None
@@ -90,7 +90,7 @@ if __name__ == '__main__':
         # Load and enjoy an existing model
         if method == 'dqn':
             print("Enjoying using DQN...")
-            enjoy_dqn(env_path=env_path, seed=seed, max_steps=max_steps, base_port=base_port, unity_arguments=unity_arguments, model_path=enjoy_path)
+            enjoy_dqn(env_path=env_path, seed=seed, max_steps=max_steps, base_port=base_port, unity_arguments=unity_arguments, model_file=enjoy_file)
         elif method == 'a2c':
             print("Loading A2C models not supported yet...")
         else:

@@ -34,14 +34,17 @@ The first three arguments can be used to turn the environment modifications on o
  
 For instance, a dqn test-run using the complex render-mode, linear motion control and a continuous reward signal can be executed by running:
 
-`python run_baselines.py <path_to_deliveryduel_build> --method dqn --unity_arguments "--render-mode complex --motion-control linear --reward-signal cont"`
+`python run_baselines.py <path_to_deliveryduel> --method dqn --unity_arguments "--render-mode complex --motion-control linear --reward-signal cont"`
 
 In order to start an instance, which loads an existing model-file in order to play against it using a gamepad, you can run:
 
-`python run_baselines.py <path_to_deliveryduel_build> --method dqn --enjoy <path_to_save_folder>\<first_portion_of_save_file_name> --unity_arguments "--human-players 1"`
+`python run_baselines.py <path_to_deliveryduel> --method dqn --enjoy <save_folder/filename> --unity_arguments "--human-players 1"`
+
+(You can specify the folder / filename models get saved to after training by passing the argument `--model-file <folder/filename>` to a training process)
 
 ### Human Player Controls
 When playing with human players enabled (see unity-arguments under 'Optional Environment Modifications'), you can use the following controls:
+
 <img src="img/Controls.png" width="40%">
 
 ### Delivery Duel Credits

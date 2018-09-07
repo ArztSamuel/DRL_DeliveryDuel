@@ -14,6 +14,8 @@ In Delivery Duel the player / agent controls a delivery van. The agent's goal is
 
 While Delivery Duel offers local-multiplayer capability for up to four players, our experiments for solely conducted on the singleplayer mode.
 
+<img src="img/PlayerVsAgent.gif" width="30%">
+
 ### Optional Environment Modifications
 There are three optional environment modifications, which can be turned off or on, resulting in eight possible configurations:
  - Environment Representation: Complex 3D render-mode or Simple 2D render-mode

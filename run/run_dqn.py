@@ -14,6 +14,7 @@ import numpy as np
 import time
 import keyboard
 import cv2
+import random
 
 
 def _make_dqn(unity_env, train_mode, reward_range=(-np.inf, np.inf)):
@@ -95,6 +96,7 @@ def enjoy(env_path, seed, max_steps, base_port, unity_arguments, model_file):
     )
 
     step_count = 0
+    rndm_act_prob = 0.08 # probability for the actor to choose a random action instead of the one with highest Q-Value
 
     while step_count < max_steps:
         obs, done = env.reset(), False
@@ -106,7 +108,10 @@ def enjoy(env_path, seed, max_steps, base_port, unity_arguments, model_file):
                 break
 
             step_count += 1
-            obs, rew, done, _ = env.step(act(obs[None])[0])
+            action = act(obs[None])[0]
+            if random.uniform(0, 1.0) < rndm_act_prob:
+                action = random.randint(0, env.action_space.n)
+            obs, rew, done, _ = env.step(action)
             episode_rew += rew
 
         print("Episode reward: ", episode_rew)

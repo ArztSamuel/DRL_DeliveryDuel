@@ -24,14 +24,25 @@ These three modifications are often abbreviated as 3D / 2D, Phys / Lin, Non-Cont
 
 <img src="img/RenderComparison.jpg" width="50%">
 
-When using the [run_baselines](frameworks/run/run_baselines.py) script for running experiments, you can use the optional commandline argument `--unity-arguments "<additional arguments>"` to pass commandline arguments to the unity process. The following unity arguments can be set to turn these optional modifications on or off:
+When using the [run_baselines](run/run_baselines.py) script for running experiments, you can use the optional commandline argument `--unity-arguments "<additional arguments>"` to pass commandline arguments to the unity process. The following unity arguments are available:
  - `--render-mode`: `complex` or `simple`
  - `--motion-control`: `physical` or `linear`
  - `--reward-signal`: `sparse` or `cont`
+ - `--human-players`: int in range [0, 3]
+ 
+The first three arguments can be used to turn the environment modifications on or off. The fourth argument `--human-players` can be used to start an instance of the game with support for 0 to 3 additional human players (controlled using gamepads).
  
 For instance, a dqn test-run using the complex render-mode, linear motion control and a continuous reward signal can be executed by running:
 
 `python run_baselines.py <path_to_deliveryduel_build> --method dqn --unity_arguments "--render-mode complex --motion-control linear --reward-signal cont"`
+
+In order to start an instance, which loads an existing model-file in order to play against it using a gamepad, you can run:
+
+`python run_baselines.py <path_to_deliveryduel_build> --method dqn --enjoy <path_to_save_folder>\<first_portion_of_save_file_name> --unity_arguments "--human-players 1"`
+
+### Human Player Controls
+When playing with human players enabled (see unity-arguments under 'Optional Environment Modifications'), you can use the following controls:
+<img src="img/Controls.png" width="40%">
 
 ### Delivery Duel Credits
 Delivery Duel was developed by Samuel Arzt, Katrin-Anna Zibuschka and Lukas Machegger, who approved to make the game publicly available for scientific purposes.

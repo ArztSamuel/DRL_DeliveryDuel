@@ -24,7 +24,7 @@ These three modifications are often abbreviated as 3D / 2D, Phys / Lin, Non-Cont
 
 <img src="img/RenderComparison.jpg" width="50%">
 
-When using the [run_baselines](frameworks/ml-agents/python/run_baselines.py) script for running experiments, you can use the optional commandline argument `--unity-arguments "<additional arguments>"` to pass commandline arguments to the unity process. The following unity arguments can be set to turn these optional modifications on or off:
+When using the [run_baselines](frameworks/run/run_baselines.py) script for running experiments, you can use the optional commandline argument `--unity-arguments "<additional arguments>"` to pass commandline arguments to the unity process. The following unity arguments can be set to turn these optional modifications on or off:
  - `--render-mode`: `complex` or `simple`
  - `--motion-control`: `physical` or `linear`
  - `--reward-signal`: `sparse` or `cont`
@@ -51,5 +51,5 @@ Please refer to the individual repositories of the frameworks for an installatio
 
 The source code of these frameworks in the state they were used for our paper is also included in this repository (see [frameworks/](frameworks/)). The code of Baselines and ML-Agents was slightly modified / extended to fit our needs. In order to train a reinforcement learning agent in a Unity game environment using the algorithms provided by Baselines, the ML-Agents environment was wrapped to function as a Gym environment.
 
-The wrappers used for training a ML-Agents environment using Baselines can be found in [frameworks/ml-agents/python/baselines_wrapper.py](frameworks/ml-agents/python/baselines_wrapper.py). The code used for executing the test-runs of our paper can be found in [frameworks/ml-agents/python/run_baselines.py](frameworks/ml-agents/python/run_baselines.py).
+The wrappers used for training a ML-Agents environment using Baselines can be found in [run/baselines_wrapper.py](run/baselines_wrapper.py). The code used for executing the test-runs of our paper can be found in [run/run_baselines.py](run/run_baselines.py).
 
